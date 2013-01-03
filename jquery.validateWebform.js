@@ -50,7 +50,43 @@
       	    name = $('label[for='+id+']').text();
       	    value = $element.val();
       	    
-      	    console.log(id);
+      	    message += validate.select(name, value);
+    	    })
+    	    //required radios
+    	    $('.webform-component-radios').each(function(){
+      	    var $element, required, checked, id, name;
+      	    $element = $(this);
+      	    required = $('.form-required', $element);
+      	    checked = $('input[type=radio]:checked', $element);
+      	    id = $('.form-radios', $element).attr('id');
+      	    name = $('label[for='+id+']').text();
+      	    
+      	    if(required[0]){
+      	      message += validate.radios(checked, name);
+      	    }
+    	    })
+    	    //required checkboxes
+    	    $('.webform-component-checkboxes').each(function(){
+      	    var $element, required, checked, id, name;
+      	    $element = $(this);
+      	    required = $('.form-required', $element);
+      	    checked = $('input[type=checkbox]:checked', $element);
+      	    id = $('.form-checkboxes', $element).attr('id');
+      	    name = $('label[for='+id+']').text();
+      	    
+      	    if(required[0]){
+        	    message += validate.checkboxes(checked, name);
+      	    }
+    	    })
+    	    //required textarea
+    	    $('textarea.required').each(function(){
+      	    var $element, id, name, value;
+      	    $element = $(this);
+      	    id = $element.attr('id');
+      	    name = $('label[for='+id+']').text();
+      	    value = $element.val();
+      	    
+      	    message += validate.textarea(name, value);
     	    })
     	    //required privacy, if defined
     	    $(settings.privacy, '#'+target.id).each(function(){
@@ -101,6 +137,34 @@
       }else{
         return "";
       }
+  	},
+  	textarea:function(name, value){
+    	if(value == ""){
+    	  return Drupal.t("The textarea "+name.replace(" *","")+" is mandatory.\n");
+      }else{
+        return "";
+      }
+  	},
+  	radios:function(checked, name){
+    	if(checked[0]){
+      	return "";
+    	}else{
+      	return Drupal.t("You must select an option from "+name.replace(" *","")+".\n");
+    	}
+  	},
+  	select:function(name, value){
+  	  if(value == "" || value == "--"){
+    	  return Drupal.t("You must select an option from "+name.replace(" *","")+".\n");
+      }else{
+        return "";
+      }
+  	},
+  	checkboxes:function(checked, name){
+    	if(checked[0]){
+      	return "";
+    	}else{
+      	return Drupal.t("You must select at least one option from "+name.replace(" *","")+".\n");
+    	}
   	},
   	privacy:function(selected){
   	  if(selected == 1){
