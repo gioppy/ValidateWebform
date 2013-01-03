@@ -16,13 +16,14 @@
 	  },
 	  form:function(target, settings){
   	  $('#'+target.id).each(function(){
-    	  var $action, $entry, $drupal, $content_lead, $boundry, $entered;
+    	  var $action, $entry, $drupal, $content_lead, $boundry, $entered, $track;
     	  $action = $(this).attr('action');
-    	  $entry = $(this).find('input.form-text, input.form-checkbox, select.form-select, textarea');
+    	  $entry = $(this).find('input.form-text, input.form-checkbox, input.form-radio, select.form-select, textarea');
     	  $drupal = $(this).find('input:hidden');
     	  $content_lead = '\nContent-Disposition: form-data;';
     	  $boundry = '-----------------------------1626259126772';
     	  $entered = '';
+    	  $track = $('input[name="submitted[outrack]"]').val();
     	  
     	  $(settings.submit, this).click(function(){
     	    var message = "";
@@ -116,6 +117,9 @@
         	    $(settings.thanks.container).fadeOut('fast', function(){
           	    $(this).parent().append($(settings.thanks.page, data));
           	    $(settings.thanks.page).fadeIn('fast');
+          	    if(settings.ga == true){
+            	    _gaq.push(['_trackPageview', $track]);
+          	    }
         	    })
       	    });
     	    }else{
@@ -184,7 +188,8 @@
     	    thanks:{
       	    'page':'.page',
       	    'container':'.container'
-    	    }
+    	    },
+    	    ga:false
     	  }
     	  
     	  return this.each(function(){
