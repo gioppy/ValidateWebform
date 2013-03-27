@@ -28,7 +28,7 @@
     	  $(settings.submit, this).click(function(){
     	    var message = "";
     	    //required input
-    	    $('input.required', '#'+target.id).each(function(){
+    	    $('input.required:visible', '#'+target.id).each(function(){
       	    var $element, count, id, name, value, type;
       	    $element = $(this);
       	    count = $element.size();
@@ -44,7 +44,7 @@
       	    message += validate.text(name, value);
     	    });
     	    //required select list
-    	    $('select.required', '#'+target.id).each(function(){
+    	    $('select.required:visible', '#'+target.id).each(function(){
       	    var $element, id, name, value;
       	    $element = $(this);
       	    id = $element.attr('id');
@@ -80,7 +80,7 @@
       	    }
     	    })
     	    //required textarea
-    	    $('textarea.required').each(function(){
+    	    $('textarea.required:visible').each(function(){
       	    var $element, id, name, value;
       	    $element = $(this);
       	    id = $element.attr('id');
