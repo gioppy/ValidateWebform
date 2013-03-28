@@ -22,7 +22,7 @@ The settings of the plugins are:
 and when the page content is attached</code></li>
 <li><code>colorbox:{} //object: colorbox oprions object.<br />
 Use all the colorbox options EXCLUDE 'href' that is added by plugin itselft, represent the value of the hidden field <br />
-submitted[thanks]. The hidden field must by added manualy when created the Webform.</code></li>
+submitted[thanks]. The hidden field must be added manualy when created the Webform.</code></li>
 <li><code>ga:false //submit the thank-you-page URL to the Google Analitycs</code></li>
 </ul>
 
