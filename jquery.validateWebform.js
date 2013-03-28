@@ -24,10 +24,10 @@
     	  $boundry = '-----------------------------1626259126772';
     	  $entered = '';
     	  $track = $('input[name="submitted[outrack]"]').val();
-    	  $deliver = $('input[name="submitted[thanks]"]').val();
     	  
     	  $(settings.submit, this).click(function(){
     	    var $this = $(this);
+    	    $deliver = $('input[name="submitted[thanks]"]', '#'+target.id).val();
     	    var message = "";
     	    //required input
     	    $('input.required:visible', '#'+target.id).each(function(){
@@ -56,7 +56,7 @@
       	    message += validate.select(name, value);
     	    })
     	    //required radios
-    	    $('.webform-component-radios').each(function(){
+    	    $('.webform-component-radios', '#'+target.id).each(function(){
       	    var $element, required, checked, id, name;
       	    $element = $(this);
       	    required = $('.form-required', $element);
@@ -69,7 +69,7 @@
       	    }
     	    })
     	    //required checkboxes
-    	    $('.webform-component-checkboxes').each(function(){
+    	    $('.webform-component-checkboxes', '#'+target.id).each(function(){
       	    var $element, required, checked, id, name;
       	    $element = $(this);
       	    required = $('.form-required', $element);
@@ -82,7 +82,7 @@
       	    }
     	    })
     	    //required textarea
-    	    $('textarea.required:visible').each(function(){
+    	    $('textarea.required:visible', '#'+target.id).each(function(){
       	    var $element, id, name, value;
       	    $element = $(this);
       	    id = $element.attr('id');
@@ -117,6 +117,7 @@
       	    $.post($action, $entered, function(data){
         	    var $temp = data;
         	    $this.show().parent().find('.inline-loading').remove();
+        	    $(settings.privacy).prop('checked', false);
         	    if($.isEmptyObject(settings.colorbox)){
         	      setup.unloading(settings);
           	    $(settings.thanks.container).fadeOut('fast', function(){
