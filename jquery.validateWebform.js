@@ -16,7 +16,7 @@
 	  },
 	  form:function(target, settings){
   	  $('#'+target.id).each(function(){
-    	  var $action, $entry, $drupal, $content_lead, $boundry, $entered, $track;
+    	  var $action, $entry, $drupal, $content_lead, $boundry, $entered, $track, $deliver;
     	  $action = $(this).attr('action');
     	  $entry = $(this).find('input.form-text, input.form-checkbox, input.form-radio, select.form-select, textarea');
     	  $drupal = $(this).find('input:hidden');
@@ -24,8 +24,10 @@
     	  $boundry = '-----------------------------1626259126772';
     	  $entered = '';
     	  $track = $('input[name="submitted[outrack]"]').val();
+    	  $deliver = $('input[name="submitted[thanks]"]').val();
     	  
     	  $(settings.submit, this).click(function(){
+    	    var $this = $(this);
     	    var message = "";
     	    //required input
     	    $('input.required:visible', '#'+target.id).each(function(){
@@ -96,6 +98,7 @@
     	    })
     	    //test that the required field is inserted
     	    if(message == ""){
+    	      $this.hide().parent().append('<span class="inline-loading"></span>');
       	    setup.loading(settings);
       	    $entry.each(function(){
         	    var $name, $value;
@@ -113,14 +116,20 @@
       	    $.ajaxSetup({contentType: 'multipart/form-data; boundary=---------------------------1626259126772', cache: false});
       	    $.post($action, $entered, function(data){
         	    var $temp = data;
-        	    setup.unloading(settings);
-        	    $(settings.thanks.container).fadeOut('fast', function(){
-          	    $(this).parent().append($(settings.thanks.page, data));
-          	    $(settings.thanks.page).fadeIn('fast');
-          	    if(settings.ga == true){
-            	    _gaq.push(['_trackPageview', $track]);
-          	    }
-        	    })
+        	    $this.show().parent().find('.inline-loading').remove();
+        	    if($.isEmptyObject(settings.colorbox)){
+        	      setup.unloading(settings);
+          	    $(settings.thanks.container).fadeOut('fast', function(){
+          	      $(this).parent().append($(settings.thanks.page, data));
+          	      $(settings.thanks.page).fadeIn('fast');
+          	      if(settings.ga == true){
+          	        _gaq.push(['_trackPageview', $track]);
+          	      }
+          	    })
+        	    }else{
+        	      settings.colorbox['href'] = $deliver+'?html=ajax_noheader&template=ajax';
+          	    $.colorbox(settings.colorbox);
+        	    }
       	    });
     	    }else{
       	    alert(message);
@@ -189,7 +198,8 @@
       	    'page':'.page',
       	    'container':'.container'
     	    },
-    	    ga:false
+    	    ga:false,
+    	    colorbox:{}
     	  }
     	  
     	  return this.each(function(){
