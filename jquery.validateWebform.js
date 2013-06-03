@@ -123,14 +123,14 @@
           	    $(settings.thanks.container).fadeOut('fast', function(){
           	      $(this).parent().append($(settings.thanks.page, data));
           	      $(settings.thanks.page).fadeIn('fast');
-          	      if(settings.ga == true){
-          	        _gaq.push(['_trackPageview', $track]);
-          	      }
           	    })
         	    }else{
         	      settings.colorbox['href'] = $deliver+'?html=ajax_noheader&template=ajax';
           	    $.colorbox(settings.colorbox);
         	    }
+        	    if(settings.ga == true){
+                _gaq.push(['_trackPageview', $track]);
+              }
       	    });
     	    }else{
       	    alert(message);
