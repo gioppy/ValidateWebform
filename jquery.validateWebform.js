@@ -23,7 +23,7 @@
     	  $content_lead = '\nContent-Disposition: form-data;';
     	  $boundry = '-----------------------------1626259126772';
     	  $entered = '';
-    	  $track = $('input[name="submitted[outrack]"]').val();
+    	  $track = $('input[name="submitted[outrack]"]', this).val();
     	  
     	  $(settings.submit, this).click(function(){
     	    var $this = $(this);
