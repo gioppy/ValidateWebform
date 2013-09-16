@@ -147,14 +147,14 @@
   	},
   	text:function(name, value){
     	if(value == ""){
-    	  return Drupal.t("The field "+name.replace(" *","")+" is mandatory.\n");
+    	  return Drupal.t("The field "+name.replace(" *","")+" is required.\n");
       }else{
         return "";
       }
   	},
   	textarea:function(name, value){
     	if(value == ""){
-    	  return Drupal.t("The textarea "+name.replace(" *","")+" is mandatory.\n");
+    	  return Drupal.t("The textarea "+name.replace(" *","")+" is required.\n");
       }else{
         return "";
       }
