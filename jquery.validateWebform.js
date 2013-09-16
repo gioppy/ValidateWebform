@@ -40,7 +40,7 @@
       	    type = $element[0].type.toLowerCase();
       	    //validate email field
       	    if($element.hasClass('email') && validate.email(value) == false){
-        	    message += Drupal.t("You must insert a vadil email address\n");
+        	    message += Drupal.t("You must insert a valid email address\n");
       	    }
       	    //validate text field
       	    message += validate.text(name, value);
@@ -147,14 +147,14 @@
   	},
   	text:function(name, value){
     	if(value == ""){
-    	  return Drupal.t("The field "+name.replace(" *","")+" is required.\n");
+    	  return Drupal.t("The field @name is required.\n", {'@name':name.replace(" *","")});
       }else{
         return "";
       }
   	},
   	textarea:function(name, value){
     	if(value == ""){
-    	  return Drupal.t("The textarea "+name.replace(" *","")+" is required.\n");
+    	  return Drupal.t("The field @name is required.\n", {'@name':name.replace(" *","")});
       }else{
         return "";
       }
@@ -163,12 +163,12 @@
     	if(checked[0]){
       	return "";
     	}else{
-      	return Drupal.t("You must select an option from "+name.replace(" *","")+".\n");
+      	return Drupal.t("You must select an option from @name.\n", {'@name':name.replace(" *","")});
     	}
   	},
   	select:function(name, value){
   	  if(value == "" || value == "--"){
-    	  return Drupal.t("You must select an option from "+name.replace(" *","")+".\n");
+    	  return Drupal.t("You must select an option from @name.\n", {'@name':name.replace(" *","")});
       }else{
         return "";
       }
@@ -177,7 +177,7 @@
     	if(checked[0]){
       	return "";
     	}else{
-      	return Drupal.t("You must select at least one option from "+name.replace(" *","")+".\n");
+      	return Drupal.t("You must select at least one option from @name.\n", {'@name':name.replace(" *","")});
     	}
   	},
   	privacy:function(selected){
