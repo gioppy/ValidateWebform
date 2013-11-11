@@ -128,7 +128,7 @@
         	      settings.colorbox['href'] = $deliver+'?html=ajax_noheader&template=ajax';
           	    $.colorbox(settings.colorbox);
         	    }
-        	    if(settings.ga == true){
+        	    if(settings.ga == true && $track){
                 _gaq.push(['_trackPageview', $track]);
               }
       	    });
