@@ -100,6 +100,9 @@
     	    if(message == ""){
     	      $this.hide().parent().append('<span class="inline-loading"></span>');
       	    setup.loading(settings);
+      	    
+      	    var $params = '?html=ajax_noheader&template=ajax';
+      	    
       	    $entry.each(function(){
         	    var $name, $value;
         	    $name = $(this).attr('name');
@@ -111,6 +114,13 @@
         	    $name = $(this).attr('name');
         	    $value = $(this).val();
         	    $entered += $boundry + $content_lead + ' name="' + $name + '"\n\n' + $value+'\n';
+        	    if(!$.isEmptyObject(settings.extra_fields)){
+        	      for(var i = 0; i < settings.extra_fields.length; i++){
+          	      if(settings.extra_fields[i] == $name){
+            	      $params += '&'+settings.extra_fields[i]+'='+$value;
+          	      }
+        	      }
+        	    }
       	    })
       	    $entered += $boundry + '\nContent-Disposition: form-data; name="op"\n\nSubmit\n'+$boundry +'--\n\n';
       	    $.ajaxSetup({contentType: 'multipart/form-data; boundary=---------------------------1626259126772', cache: false});
@@ -125,7 +135,7 @@
           	      $(settings.thanks.page).fadeIn('fast');
           	    })
         	    }else{
-        	      settings.colorbox['href'] = $deliver+'?html=ajax_noheader&template=ajax';
+        	      settings.colorbox['href'] = $deliver+$params;
           	    $.colorbox(settings.colorbox);
         	    }
         	    if(settings.ga == true && $track){
@@ -200,7 +210,8 @@
       	    'container':'.container'
     	    },
     	    ga:false,
-    	    colorbox:{}
+    	    colorbox:{},
+    	    extra_fields:[]
     	  }
     	  
     	  return this.each(function(){
