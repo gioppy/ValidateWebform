@@ -23,11 +23,11 @@
     	  $content_lead = '\nContent-Disposition: form-data;';
     	  $boundry = '-----------------------------1626259126772';
     	  $entered = '';
-    	  $track = $('input[name="submitted[outrack]"]').val();
-    	  $deliver = $('input[name="submitted[thanks]"]').val();
+    	  $track = $('input[name="submitted[outrack]"]', this).val();
     	  
     	  $(settings.submit, this).click(function(){
     	    var $this = $(this);
+    	    $deliver = $('input[name="submitted[thanks]"]', '#'+target.id).val();
     	    var message = "";
     	    //required input
     	    $('input.required:visible', '#'+target.id).each(function(){
@@ -40,7 +40,7 @@
       	    type = $element[0].type.toLowerCase();
       	    //validate email field
       	    if($element.hasClass('email') && validate.email(value) == false){
-        	    message += Drupal.t("You must insert a vadil email address\n");
+        	    message += Drupal.t("You must insert a valid email address\n");
       	    }
       	    //validate text field
       	    message += validate.text(name, value);
@@ -56,7 +56,7 @@
       	    message += validate.select(name, value);
     	    })
     	    //required radios
-    	    $('.webform-component-radios').each(function(){
+    	    $('.webform-component-radios', '#'+target.id).each(function(){
       	    var $element, required, checked, id, name;
       	    $element = $(this);
       	    required = $('.form-required', $element);
@@ -69,7 +69,7 @@
       	    }
     	    })
     	    //required checkboxes
-    	    $('.webform-component-checkboxes').each(function(){
+    	    $('.webform-component-checkboxes', '#'+target.id).each(function(){
       	    var $element, required, checked, id, name;
       	    $element = $(this);
       	    required = $('.form-required', $element);
@@ -82,7 +82,7 @@
       	    }
     	    })
     	    //required textarea
-    	    $('textarea.required:visible').each(function(){
+    	    $('textarea.required:visible', '#'+target.id).each(function(){
       	    var $element, id, name, value;
       	    $element = $(this);
       	    id = $element.attr('id');
@@ -100,6 +100,9 @@
     	    if(message == ""){
     	      $this.hide().parent().append('<span class="inline-loading"></span>');
       	    setup.loading(settings);
+      	    
+      	    var $params = '?html=ajax_noheader&template=ajax';
+      	    
       	    $entry.each(function(){
         	    var $name, $value;
         	    $name = $(this).attr('name');
@@ -111,25 +114,33 @@
         	    $name = $(this).attr('name');
         	    $value = $(this).val();
         	    $entered += $boundry + $content_lead + ' name="' + $name + '"\n\n' + $value+'\n';
+        	    if(!$.isEmptyObject(settings.extra_fields)){
+        	      for(var i = 0; i < settings.extra_fields.length; i++){
+          	      if(settings.extra_fields[i] == $name){
+            	      $params += '&'+settings.extra_fields[i]+'='+$value;
+          	      }
+        	      }
+        	    }
       	    })
       	    $entered += $boundry + '\nContent-Disposition: form-data; name="op"\n\nSubmit\n'+$boundry +'--\n\n';
       	    $.ajaxSetup({contentType: 'multipart/form-data; boundary=---------------------------1626259126772', cache: false});
       	    $.post($action, $entered, function(data){
         	    var $temp = data;
         	    $this.show().parent().find('.inline-loading').remove();
+        	    $(settings.privacy).prop('checked', false);
         	    if($.isEmptyObject(settings.colorbox)){
         	      setup.unloading(settings);
           	    $(settings.thanks.container).fadeOut('fast', function(){
           	      $(this).parent().append($(settings.thanks.page, data));
           	      $(settings.thanks.page).fadeIn('fast');
-          	      if(settings.ga == true){
-          	        _gaq.push(['_trackPageview', $track]);
-          	      }
           	    })
         	    }else{
-        	      settings.colorbox['href'] = $deliver+'?html=ajax_noheader&template=ajax';
+        	      settings.colorbox['href'] = $deliver+$params;
           	    $.colorbox(settings.colorbox);
         	    }
+        	    if(settings.ga == true && $track){
+                _gaq.push(['_trackPageview', $track]);
+              }
       	    });
     	    }else{
       	    alert(message);
@@ -146,14 +157,14 @@
   	},
   	text:function(name, value){
     	if(value == ""){
-    	  return Drupal.t("The field "+name.replace(" *","")+" is mandatory.\n");
+    	  return Drupal.t("The field @name is required.\n", {'@name':name.replace(" *","")});
       }else{
         return "";
       }
   	},
   	textarea:function(name, value){
     	if(value == ""){
-    	  return Drupal.t("The textarea "+name.replace(" *","")+" is mandatory.\n");
+    	  return Drupal.t("The field @name is required.\n", {'@name':name.replace(" *","")});
       }else{
         return "";
       }
@@ -162,12 +173,12 @@
     	if(checked[0]){
       	return "";
     	}else{
-      	return Drupal.t("You must select an option from "+name.replace(" *","")+".\n");
+      	return Drupal.t("You must select an option from @name.\n", {'@name':name.replace(" *","")});
     	}
   	},
   	select:function(name, value){
   	  if(value == "" || value == "--"){
-    	  return Drupal.t("You must select an option from "+name.replace(" *","")+".\n");
+    	  return Drupal.t("You must select an option from @name.\n", {'@name':name.replace(" *","")});
       }else{
         return "";
       }
@@ -176,7 +187,7 @@
     	if(checked[0]){
       	return "";
     	}else{
-      	return Drupal.t("You must select at least one option from "+name.replace(" *","")+".\n");
+      	return Drupal.t("You must select at least one option from @name.\n", {'@name':name.replace(" *","")});
     	}
   	},
   	privacy:function(selected){
@@ -199,7 +210,8 @@
       	    'container':'.container'
     	    },
     	    ga:false,
-    	    colorbox:{}
+    	    colorbox:{},
+    	    extra_fields:[]
     	  }
     	  
     	  return this.each(function(){
