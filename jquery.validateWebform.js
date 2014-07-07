@@ -101,7 +101,7 @@
     	      $this.hide().parent().append('<span class="inline-loading"></span>');
       	    setup.loading(settings);
       	    
-      	    var $params = '?html=ajax_noheader&template=ajax';
+      	    var $params = '?html=ajax&page=ajax';
       	    
       	    $entry.each(function(){
         	    var $name, $value;
@@ -124,7 +124,7 @@
       	    })
       	    $entered += $boundry + '\nContent-Disposition: form-data; name="op"\n\nSubmit\n'+$boundry +'--\n\n';
       	    $.ajaxSetup({contentType: 'multipart/form-data; boundary=---------------------------1626259126772', cache: false});
-      	    $.post($action, $entered, function(data){
+      	    $.post($action, $entered).done(function(data){
         	    var $temp = data;
         	    $this.show().parent().find('.inline-loading').remove();
         	    $(settings.privacy).prop('checked', false);
@@ -141,7 +141,10 @@
         	    if(settings.ga == true && $track){
                 _gaq.push(['_trackPageview', $track]);
               }
+      	    }).fail(function(e){
+        	    alert(Drupal.t("There is a problem submitting the form. Please, retry later."));
       	    });
+      	    
     	    }else{
       	    alert(message);
     	    }
