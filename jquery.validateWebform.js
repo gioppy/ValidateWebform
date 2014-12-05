@@ -93,7 +93,7 @@
     	    })
     	    //required privacy, if defined
     	    $(settings.privacy, '#'+target.id).each(function(){
-      	    var selected = $(this+':checked').length;
+      	    var selected = $(this).is(':checked');
       	    message += validate.privacy(selected);
     	    })
     	    //test that the required field is inserted
@@ -194,7 +194,7 @@
     	}
   	},
   	privacy:function(selected){
-  	  if(selected == 1){
+  	  if(selected){
     	  return "";
   	  }else{
     	  return Drupal.t("You must accept the privacy.\n");
