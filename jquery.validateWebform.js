@@ -24,7 +24,7 @@
     	  $boundry = '-----------------------------1626259126772';
     	  $entered = '';
     	  $track = $('input[name="submitted[outrack]"]', this).val();
-    	  
+
     	  $(settings.submit, this).click(function(){
     	    var $this = $(this);
     	    $deliver = $('input[name="submitted[thanks]"]', '#'+target.id).val();
@@ -52,7 +52,7 @@
       	    id = $element.attr('id');
       	    name = $('label[for='+id+']').text();
       	    value = $element.val();
-      	    
+
       	    message += validate.select(name, value);
     	    })
     	    //required radios
@@ -63,7 +63,7 @@
       	    checked = $('input[type=radio]:checked', $element);
       	    id = $('.form-radios', $element).attr('id');
       	    name = $('label[for='+id+']').text();
-      	    
+
       	    if(required[0]){
       	      message += validate.radios(checked, name);
       	    }
@@ -76,7 +76,7 @@
       	    checked = $('input[type=checkbox]:checked', $element);
       	    id = $('.form-checkboxes', $element).attr('id');
       	    name = $('label[for='+id+']').text();
-      	    
+
       	    if(required[0]){
         	    message += validate.checkboxes(checked, name);
       	    }
@@ -88,7 +88,7 @@
       	    id = $element.attr('id');
       	    name = $('label[for='+id+']').text();
       	    value = $element.val();
-      	    
+
       	    message += validate.textarea(name, value);
     	    })
     	    //required privacy, if defined
@@ -100,9 +100,9 @@
     	    if(message == ""){
     	      $this.hide().parent().append('<span class="inline-loading"></span>');
       	    setup.loading(settings);
-      	    
+
       	    var $params = '?html=ajax&page=ajax';
-      	    
+
       	    $entry.each(function(){
         	    var $name, $value;
         	    $name = $(this).attr('name');
@@ -139,12 +139,15 @@
           	    $.colorbox(settings.colorbox);
         	    }
         	    if(settings.ga == true && $track){
-                _gaq.push(['_trackPageview', $track]);
+                //_gaq.push(['_trackPageview', $track]);
+								ga('send', 'pageview', {
+									'page': $track
+								});
               }
       	    }).fail(function(e){
         	    alert(Drupal.t("There is a problem submitting the form. Please, retry later."));
       	    });
-      	    
+
     	    }else{
       	    alert(message);
     	    }
@@ -216,7 +219,7 @@
     	    colorbox:{},
     	    extra_fields:[]
     	  }
-    	  
+
     	  return this.each(function(){
       	  if(options){
         	  $.extend(settings, options)
@@ -226,7 +229,7 @@
       }
     }
   };
-  
+
   $.fn.vw = function(method){
     if(methods[method]){
 			return methods[method].apply( this, Array.prototype.slice.call(arguments, 1));
@@ -236,5 +239,5 @@
 			$.error('Method '+method+' does not exist on jQuery.validateWebform');
 		}
   }
-	  
-})(jQuery);		
+
+})(jQuery);
