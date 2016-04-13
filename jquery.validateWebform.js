@@ -16,7 +16,8 @@
 	  },
 	  form:function(target, settings){
   	  $('#'+target.id).each(function(){
-    	  var $action, $entry, $drupal, $content_lead, $boundry, $entered, $track, $deliver;
+    	  var $action, $entry, $drupal, $content_lead, $boundry, $entered, $track, $deliver, form;
+        form = this;
     	  $action = $(this).attr('action');
     	  $entry = $(this).find('input.form-text, input.form-checkbox, input.form-radio, select.form-select, textarea');
     	  $drupal = $(this).find('input:hidden');
@@ -130,10 +131,9 @@
         	    $(settings.privacy).prop('checked', false);
         	    if($.isEmptyObject(settings.colorbox)){
         	      setup.unloading(settings);
-          	    $(settings.thanks.container).fadeOut('fast', function(){
-          	      $(this).parent().append($(settings.thanks.page, data));
-          	      $(settings.thanks.page).fadeIn('fast');
-          	    })
+          	    $(form).fadeOut('fast', function(){
+          	      $(this).html($(settings.thanks.page, data)).fadeIn('fast');
+          	    }).next(settings.thanks.container);
         	    }else{
         	      settings.colorbox['href'] = $deliver+$params;
           	    $.colorbox(settings.colorbox);
