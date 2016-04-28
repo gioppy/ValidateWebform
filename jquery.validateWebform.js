@@ -132,8 +132,8 @@
         	    if($.isEmptyObject(settings.colorbox)){
         	      setup.unloading(settings);
           	    $(form).fadeOut('fast', function(){
-          	      $(this).html($(settings.thanks.page, data)).fadeIn('fast');
-          	    }).next(settings.thanks.container);
+          	      $(settings.thanks.container).html($(settings.thanks.page, data)).fadeIn('fast');
+          	    });//.next(settings.thanks.container);
         	    }else{
         	      settings.colorbox['href'] = $deliver+$params;
           	    $.colorbox(settings.colorbox);
